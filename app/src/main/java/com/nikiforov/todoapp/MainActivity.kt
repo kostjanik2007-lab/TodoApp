@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,6 +39,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun todoList() {
+    val tasks = remember { mutableStateListOf<String>() }
     var state by remember { mutableStateOf("") }
     Column(
         horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
@@ -49,15 +51,19 @@ fun todoList() {
             singleLine = true
         )
         Spacer(modifier = Modifier.size(16.dp))
-        Button(onClick = ) {
+        Button(onClick =
+        {
+            tasks.add(state)
+            state = ""
+        }) {
             Text("Добавить новую задачу")
         }
         Spacer(modifier = Modifier.size(16.dp))
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(100) {
-                Text("Задача №$it")
+            items(tasks.size) {
+                Text(tasks[it])
             }
         }
     }
