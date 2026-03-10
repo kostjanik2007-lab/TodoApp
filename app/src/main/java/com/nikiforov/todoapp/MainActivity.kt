@@ -1,5 +1,6 @@
 package com.nikiforov.todoapp
 
+import android.R
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,6 +25,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nikiforov.todoapp.ui.theme.TodoAppTheme
@@ -38,9 +41,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+data class Task( val text: String, val isDone: Boolean)
+
 @Composable
 fun todoList() {
-    val tasks = remember { mutableStateListOf<String>() }
+    val tasks = remember { mutableStateListOf<Task>() }
     var state by remember { mutableStateOf("") }
     Column(
         horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
@@ -54,7 +59,7 @@ fun todoList() {
         Spacer(modifier = Modifier.size(16.dp))
         Button(onClick =
         {
-            tasks.add(state)
+            tasks.add(Task(text = state, isDone = false))
             state = ""
         }) {
             Text("Добавить новую задачу")
@@ -64,10 +69,18 @@ fun todoList() {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(tasks.size) {
-                Text(tasks[it], modifier = Modifier.clickable { tasks.removeAt(it) })
+                Text(
+                    text = tasks[it].text,
+                    modifier = Modifier.clickable { tasks[it] = tasks[it].copy(isDone = !tasks[it].isDone) },
+                    style = if (tasks[it].isDone) {
+                        TextStyle(textDecoration = TextDecoration.LineThrough)
+                    } else {
+                        TextStyle()
+                    })
+
+
             }
         }
     }
-
 }
 
