@@ -44,6 +44,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.nikiforov.todoapp.ui.theme.TodoAppTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -55,7 +58,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            todoList()
+            val navController = rememberNavController()
+            NavHost(navController = navController, startDestination = "main") {
+                composable("main") { todoList() }
+                composable("history") {HistoryScreen() }
+            }
         }
     }
 }
@@ -136,5 +143,10 @@ fun todoList() {
 
         }
     }
+}
+
+@Composable
+fun HistoryScreen() {
+    Text("История")
 }
 
